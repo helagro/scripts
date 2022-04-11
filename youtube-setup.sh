@@ -17,6 +17,6 @@ if [ -e $BASEDIR/installed/youtube-setup ]; then
     fi
 else
     pip install gdown
-    echo 'alias yt="/Users/i/Documents/github/scripts/youtube-setup.sh"' >> ~/.zshrc
+    echo 'alias yt='$BASEDIR'/youtube-setup.sh' >> ~/.zshrc
     touch $BASEDIR/installed/youtube-setup
 fi
