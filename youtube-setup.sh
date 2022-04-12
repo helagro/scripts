@@ -11,8 +11,8 @@ if [ -e $BASEDIR/installed/youtube-setup ]; then
         AUDIO_NAME=$(find . -name *.mp3)
         STRIPPED_AUDIO_NAME="${AUDIO_NAME%.mp3}"
         VIDEO_NAME=$(find . -name *.MOV)
-        mv $VIDEO_NAME $STRIPPED_AUDIO_NAME.MOV 
-        mv /Users/i/Creative\ Cloud\ Files/new-vid /Users/i/Creative\ Cloud\ Files/$STRIPPED_AUDIO_NAME
+        mv '"'$VIDEO_NAME'"' '"'$STRIPPED_AUDIO_NAME.MOV 
+        mv '"'/Users/i/Creative Cloud Files/new-vid /Users/i/Creative Cloud Files/$STRIPPED_AUDIO_NAME'"'
         open /Applications/Adobe\ Premiere\ Pro\ 2022/Adobe\ Premiere\ Pro\ 2022.app
     fi
 else
