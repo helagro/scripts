@@ -1,51 +1,67 @@
 #!/bin/bash
-source env.sh
+source shared/env.sh
+source shared/shared.sh
 
+
+BASENAME=$(basename "$0")
 BASEDIR=$(dirname "$0")
 SKIP_DOWNLOAD="${1:-0}"
 VIDEOS_DIR="/Users/i/Creative Cloud Files/"
 
-is_installed(){
-    return -e $BASEDIR/installed/youtube-setup
-}
-has_internet(){
-    return [ "$(ping -c 1 8.8.8.8 | grep '100% packet loss' )" != "" ]
+
+prepare_and_download(){
+	if [ -e "$VIDEOS_DIR""new-vid" ]; then
+		echo "remove 'new-vid' folder first"
+		exit 1
+	fi
+	cp -r "$VIDEOS_DIR""_video" "$VIDEOS_DIR""new-vid"
+	cd "$VIDEOS_DIR""new-vid/input"
+	gdown --folder $DRIVE_FOLDER
 }
 
+rename(){
+	AUDIO_NAME=$(find . -name *.mp3)
+	VIDEO_NAME=$(find . -name *.MOV)
+	if [ "$AUDIO_NAME" != "" ]; then
+		rename_with_audio_name "$AUDIO_NAME" "$VIDEO_NAME"
+	else
+		echo "Rename based on video name"
+		mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR"$VIDEO_NAME
+	fi
+}
 rename_with_audio_name(){
     echo "Rename based on audio name"
     STRIPPED_AUDIO_NAME="${1%.mp3}"
     mv "$2" "$STRIPPED_AUDIO_NAME.MOV"
     mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR"$STRIPPED_AUDIO_NAME
 }
-install(){
+
+local_install(){
     pip install gdown
-    echo 'alias yt='$BASEDIR'/youtube-setup.sh' >> ~/.zshrc
-    touch $BASEDIR/installed/youtube-setup
+    install_shared $BASENAME
 }
 
-if [ is_installed ]; then
-    if [ has_internet ]; then
-        if [[ $* == *--skip-download* ]]; then 
-            echo "Skipping download"
-            cd "$VIDEOS_DIR""new-vid/input"
+main(){
+    if is_installed_shared $BASENAME; then
+        if has_internet; then
+            if [[ $* == *--skip-download* ]]; then 
+                echo "Skipping download"
+                cd "$VIDEOS_DIR""new-vid/input"
+            else
+                prepare_and_download
+            fi
+            rename
+            open /Applications/Adobe\ Premiere\ Pro\ 2022/Adobe\ Premiere\ Pro\ 2022.app
         else
-            cp -r "$VIDEOS_DIR""_video" "$VIDEOS_DIR""new-vid"
-            cd "$VIDEOS_DIR""new-vid/input"
-            gdown --folder --id $DRIVE_FOLDER
+            echo "No Internet"
         fi
-        AUDIO_NAME=$(find . -name *.mp3)
-        VIDEO_NAME=$(find . -name *.MOV)
-        if [ "$AUDIO_NAME" != "" ]; then
-            rename_with_audio_name "$AUDIO_NAME" "$VIDEO_NAME"
-        else
-            echo "Rename based on video name"
-            mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR"$VIDEO_NAME
-        fi
-        open /Applications/Adobe\ Premiere\ Pro\ 2022/Adobe\ Premiere\ Pro\ 2022.app
     else
-        echo "No Internet"
+        local_install
     fi
+}
+
+if [ "$1" == "-h" ]; then
+    echo "Flags: --skip-download";
 else
-    install
+    main
 fi
