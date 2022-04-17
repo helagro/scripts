@@ -5,7 +5,7 @@ is_installed_shared(){
     return $?
 }
 install_shared(){
-    echo 'alias yt='$BASEDIR'/'$1 >> ~/.zshrc
+    echo "alias $2="$BASEDIR'/'$1 >> ~/.zshrc
     touch $BASEDIR/installed/$1
     echo "Installed"
 }
