@@ -2,7 +2,8 @@
 source env.sh
 
 BASEDIR=$(dirname "$0")
-SKIP_DOWNLOAD=$1
+SKIP_DOWNLOAD="${1:-0}"
+VIDEOS_DIR="/Users/i/Creative Cloud Files/"
 
 is_installed(){
     return -e $BASEDIR/installed/youtube-setup
@@ -15,7 +16,7 @@ rename_with_audio_name(){
     echo "Rename based on audio name"
     STRIPPED_AUDIO_NAME="${1%.mp3}"
     mv "$2" "$STRIPPED_AUDIO_NAME.MOV"
-    mv "/Users/i/Creative Cloud Files/new-vid" "/Users/i/Creative Cloud Files/$STRIPPED_AUDIO_NAME"
+    mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR"$STRIPPED_AUDIO_NAME
 }
 install(){
     pip install gdown
@@ -25,20 +26,21 @@ install(){
 
 if [ is_installed ]; then
     if [ has_internet ]; then
-        if [ SKIP_DOWNLOAD ]; then 
-            cd /Users/i/Creative\ Cloud\ Files/new-vid/input
+        if [[ $* == *--skip-download* ]]; then 
+            echo "Skipping download"
+            cd "$VIDEOS_DIR""new-vid/input"
         else
-            cp -r /Users/i/Creative\ Cloud\ Files/_video /Users/i/Creative\ Cloud\ Files/new-vid
-            cd /Users/i/Creative\ Cloud\ Files/new-vid/input
+            cp -r "$VIDEOS_DIR""_video" "$VIDEOS_DIR""new-vid"
+            cd "$VIDEOS_DIR""new-vid/input"
             gdown --folder --id $DRIVE_FOLDER
         fi
         AUDIO_NAME=$(find . -name *.mp3)
         VIDEO_NAME=$(find . -name *.MOV)
         if [ "$AUDIO_NAME" != "" ]; then
-            rename_with_audio_name "$AUDIO_NAME" $VIDEO_NAME
+            rename_with_audio_name "$AUDIO_NAME" "$VIDEO_NAME"
         else
             echo "Rename based on video name"
-            mv "/Users/i/Creative Cloud Files/new-vid" "/Users/i/Creative Cloud Files/$VIDEO_NAME"
+            mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR"$VIDEO_NAME
         fi
         open /Applications/Adobe\ Premiere\ Pro\ 2022/Adobe\ Premiere\ Pro\ 2022.app
     else
