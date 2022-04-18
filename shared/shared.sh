@@ -6,12 +6,14 @@ get_install_check_file_path(){
     PATH_WITHOUT_EXT="${PATH%.*}"
     echo $PATH_WITHOUT_EXT
 }
-is_installed_shared(){
-    ls $(get_install_check_file_path $1)
+is_installed(){
+    ls $(get_install_check_file_path $1) >/dev/null
     return $?
 }
 install_shared(){
-    echo "alias $2=\""$BASEDIR'/'$1'"' >> ~/.zshrc
+    if [ ! -z "$2" ]; then
+        echo "alias $2=\""$BASEDIR'/'$1'"' >> ~/.zshrc
+    fi
     touch $(get_install_check_file_path $1)
     echo "Installed"
 }

@@ -15,7 +15,7 @@ prepare_and_download(){
 		echo "remove 'new-vid' folder first"
 		exit 1
 	fi
-    
+
 	cp -r "$VIDEOS_DIR""_video" "$VIDEOS_DIR""new-vid"
 	cd "$VIDEOS_DIR""new-vid/input"
 	gdown --folder $DRIVE_FOLDER
@@ -44,7 +44,7 @@ local_install(){
 }
 
 main(){
-    if is_installed_shared $BASENAME; then
+    if is_installed $BASENAME; then
         if [[ $* == *--skip-download* ]]; then 
             echo "Skipping download"
             cd "$VIDEOS_DIR""new-vid/input"
