@@ -1,6 +1,6 @@
 #!/bin/bash
-source shared/env.sh
-source shared/shared.sh
+source $(dirname $0)/shared/env.sh
+source $(dirname $0)/shared/shared.sh
 
 
 BASENAME=$(basename "$0")

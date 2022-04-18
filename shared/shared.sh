@@ -1,6 +1,5 @@
 BASEDIR=$(dirname "$0")
 
-
 get_install_check_file_path(){
     PATH=$BASEDIR/installed/$1
     PATH_WITHOUT_EXT="${PATH%.*}"

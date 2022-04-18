@@ -1,6 +1,6 @@
 #!/bin/bash
-source shared/env.sh
-source shared/shared.sh
+source $(dirname $0)/shared/env.sh
+source $(dirname $0)/shared/shared.sh
 
 OTHER_MAX_AGE=182
 MAX_EMPTY_FOLDER_AGE=10
