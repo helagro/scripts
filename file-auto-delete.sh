@@ -4,25 +4,25 @@ source shared/shared.sh
 
 OTHER_MAX_AGE=182
 MAX_EMPTY_FOLDER_AGE=10
-EXTS_AND_MAX_AGE=( "zip" 30 "png" 30 "jpg" 30 "DS_Store" 10)
+EXTS_AND_MAX_AGE=( "zip" 30 "png" -30 "jpg" 30 "DS_Store" 10)
 
 BASENAME=$(basename "$0")
 
 
 delete_file(){
     trash "$1"
-    echo "Deleted file $1"
+    log $BASENAME "Deleted file $1"
 }
 handle_file(){
     EXT="${1##*.}"
     for (( i = 0; i < ${#EXTS_AND_MAX_AGE[@]}; i+=2 )); do
         if [[ "$EXT" = ${EXTS_AND_MAX_AGE[i]} ]] && [[ $(find "$1" -mtime +${EXTS_AND_MAX_AGE[i+1]} -print) ]]; then
-            delete_file $1
+            delete_file "$1"
             return
         fi
     done
     if [[ $(find "$1" -mtime +$OTHER_MAX_AGE -print) ]]; then
-        delete_file $1
+        delete_file "$1"
     fi
 }
 handle_folder(){        
