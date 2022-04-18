@@ -35,7 +35,7 @@ rename_with_audio_name(){
     echo "Rename based on audio name"
     STRIPPED_AUDIO_NAME="${1%.mp3}"
     mv "$2" "$STRIPPED_AUDIO_NAME.MOV"
-    mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR"$STRIPPED_AUDIO_NAME
+    mv "$VIDEOS_DIR""new-vid" "$VIDEOS_DIR""$STRIPPED_AUDIO_NAME"
 }
 
 local_install(){
