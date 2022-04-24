@@ -45,7 +45,7 @@ local_install(){
 
 main(){
     if is_installed $BASENAME; then
-        if [[ $* == *--skip-download* ]]; then 
+        if [[ "$1" == "-l" ]]; then 
             echo "Skipping download"
             cd "$VIDEOS_DIR""new-vid/input"
         else
@@ -59,7 +59,7 @@ main(){
 }
 
 if [ "$1" == "-h" ]; then
-    echo "Flags: --skip-download";
+    echo "Flags: -l  :Skips download, uses local folder named new-vid";
 else
-    main
+    main $1
 fi
