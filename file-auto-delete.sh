@@ -33,7 +33,7 @@ handle_folder(){
         fi
         return
     fi
-    for ENTRY in "$1"/*; do
+    for ENTRY in "$1"; do
         if [ -d "$ENTRY" ]; then
             handle_folder "$ENTRY"
         else
