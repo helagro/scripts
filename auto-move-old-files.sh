@@ -5,12 +5,12 @@ source $(dirname $0)/shared/shared.sh
 BASENAME=$(basename "$0")
 
 
-move_folder(){
+move_file(){
     folderName=$(basename "$1")
-    mv "$1" "$YOUTUBE_FOLDER/old/$folderName"
+    mv "$1" "$2/old/$folderName"
 }
-main(){        
-    for ENTRY in "$YOUTUBE_FOLDER"/*; do
+handle_folder(){
+    for ENTRY in "$1"/*; do
         if [[ ! $(find "$ENTRY" -mtime +28 -print) ]]; then
             continue
         fi
@@ -22,7 +22,12 @@ main(){
             continue
         fi
 
-        move_folder "$ENTRY"
+        move_file "$ENTRY" "$1"
+    done
+}
+main(){        
+    for folder in "${MOVE_OLD_FILES_FOLDERS[@]}"; do
+        handle_folder "$folder"
     done
 }
 
