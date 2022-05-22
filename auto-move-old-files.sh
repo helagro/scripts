@@ -11,7 +11,7 @@ move_file(){
 }
 handle_folder(){
     for ENTRY in "$1"/*; do
-        if [[ ! $(find "$ENTRY" -mtime +28 -print) ]]; then
+        if [[ ! $(find "$ENTRY" -mtime +100 -print) ]]; then
             continue
         fi
         TAGS=$(tag -l "$ENTRY")
