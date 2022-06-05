@@ -11,7 +11,7 @@ move_file(){
 }
 handle_folder(){
     MAX_AGE=$2
-    : ${MAX_AGE:=100}
+    : ${MAX_AGE:=56}
 
     for ENTRY in "$1"/*; do
         if [[ ! $(find "$ENTRY" -mtime +$MAX_AGE -print) ]]; then
